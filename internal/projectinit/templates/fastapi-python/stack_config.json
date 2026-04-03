@@ -1,0 +1,47 @@
+{
+  "project": "{{.ProjectName}}",
+  "stack": "fastapi-python",
+  "version": "1.0",
+  "tools": {
+    "package_manager": "uv",
+    "python_version": "3.12+",
+    "forbidden_substitutions": [
+      "pip install → use uv add",
+      "bcrypt → use argon2id",
+      "requests → use httpx",
+      "flask → use fastapi"
+    ]
+  },
+  "backend": {
+    "framework": "FastAPI 0.100+",
+    "orm": "SQLAlchemy 2.0",
+    "async_driver": "aiosqlite or asyncpg",
+    "migrations": "Alembic",
+    "validation": "Pydantic v2",
+    "http_client": "httpx"
+  },
+  "auth": {
+    "method": "JWT",
+    "password_hash": "argon2id",
+    "forbidden": ["bcrypt", "md5", "sha1", "plain_text"]
+  },
+  "testing": {
+    "framework": "pytest + pytest-asyncio",
+    "coverage_minimum": 80,
+    "forbidden": ["unittest only (use pytest)"]
+  },
+  "database": {
+    "naming": "snake_case, no prefix",
+    "soft_delete": "Use deleted_at timestamp, never hard delete",
+    "append_only_tables": []
+  },
+  "api": {
+    "versioning": "/api/v1/",
+    "response_format": "JSON",
+    "error_format": "{ detail: string, code: string }"
+  },
+  "mandatory_reads": [
+    ".claude/MANDATORY_CHECKS.md",
+    ".claude/stack_config.json"
+  ]
+}

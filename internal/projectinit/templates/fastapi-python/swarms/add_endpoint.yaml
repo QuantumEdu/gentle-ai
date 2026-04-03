@@ -1,0 +1,22 @@
+# swarms/add_endpoint.yaml
+# Lightweight flow for adding an endpoint to an existing module.
+
+name: "add-endpoint"
+description: "Add a new endpoint: API design → implementation → tests"
+
+steps:
+  - agent: backend-developer
+    task: "Add the new Pydantic schema and FastAPI route. Follow existing patterns in the router."
+
+  - agent: backend-developer
+    task: "Implement the use case or extend the existing service."
+    depends_on: backend-developer
+
+  - agent: test-engineer
+    task: "Write tests for the new endpoint. Cover happy path and error cases."
+    depends_on: backend-developer
+
+conditions:
+  - if: "test_coverage < 80"
+    then: reject
+    message: "Coverage below 80%. Add more tests."

@@ -1,0 +1,46 @@
+# swarms/create_module.yaml
+# Full module creation — sequential agent orchestration.
+# Usage: describe the module to create, this flow handles the rest.
+
+name: "create-module"
+description: "Full module creation: design → schema → API → implementation → security audit → tests"
+
+steps:
+  - agent: architect
+    task: "Review and approve the module design. Validate against stack_config.json."
+    required: true
+    on_reject: stop
+
+  - agent: backend-developer
+    task: "Implement domain models and repository interfaces in app/domain/."
+    depends_on: architect
+
+  - agent: backend-developer
+    task: "Implement use cases and services in app/application/."
+    depends_on: backend-developer
+
+  - agent: backend-developer
+    task: "Implement FastAPI router and Pydantic schemas in app/api/."
+    depends_on: backend-developer
+
+  - agent: security-expert
+    task: "Audit the implementation for security issues. Check auth, input validation, password handling."
+    depends_on: backend-developer
+    on_issues: block
+
+  - agent: test-engineer
+    task: "Write pytest tests for all new code. Minimum 80% coverage."
+    depends_on: security-expert
+
+  - agent: architect
+    task: "Final validation: confirm implementation matches approved design."
+    depends_on: test-engineer
+    on_reject: stop
+
+conditions:
+  - if: "test_coverage < 80"
+    then: reject
+    message: "Coverage below 80%. test-engineer must add more tests."
+  - if: "security_issues > 0"
+    then: reject
+    message: "Security issues found. security-expert must resolve before merge."

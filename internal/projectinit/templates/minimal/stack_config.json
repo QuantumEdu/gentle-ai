@@ -1,0 +1,13 @@
+{
+  "project": "{{.ProjectName}}",
+  "stack": "custom",
+  "version": "1.0",
+  "tools": {
+    "package_manager": "",
+    "forbidden_substitutions": []
+  },
+  "mandatory_reads": [
+    ".claude/MANDATORY_CHECKS.md",
+    ".claude/stack_config.json"
+  ]
+}

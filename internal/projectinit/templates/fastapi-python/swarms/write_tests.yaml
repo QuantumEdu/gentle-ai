@@ -1,0 +1,19 @@
+# swarms/write_tests.yaml
+# Standalone test generation for existing code.
+
+name: "write-tests"
+description: "Generate test suite for existing code. Target: 90% coverage."
+
+steps:
+  - agent: test-engineer
+    task: "Analyze existing code, identify untested paths, write pytest tests. Target 90% coverage."
+    context: "fork"
+
+conditions:
+  - if: "test_coverage < 80"
+    then: retry
+    max_retries: 2
+    message: "Coverage still below 80%. Keep writing tests."
+  - if: "test_coverage >= 90"
+    then: celebrate
+    message: "90%+ coverage achieved."
